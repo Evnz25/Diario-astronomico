@@ -4,13 +4,15 @@ import tkinter as ttk
 class anotacao_view():
     def __init__(self):
         self.root = ttk.Tk()
-        self.root.geometry("500x500")
+        self.root.geometry("700x500")
 
-        self.anotacao_dadosbasico_tela()
+        self.anotacao_dadosbasico()
+
+        self.anotacao_descricao()
 
         self.root.mainloop()
 
-    def anotacao_dadosbasico_tela(self):
+    def anotacao_dadosbasico(self):
         container = ttk.Frame(relief=ttk.RAISED, borderwidth=1, bg="light grey")
         container.pack(fill=ttk.BOTH, expand=True)
 
@@ -67,6 +69,17 @@ class anotacao_view():
         escalaBortle = ttk.Scale(container, from_=1, to=8, width=12, length=200, variable=self.bortle,
                                        orient=ttk.HORIZONTAL, bg="light grey")
         escalaBortle.grid(column=1, row=7, padx=0, pady=5)
+
+
+    def anotacao_descricao(self):
+        container = ttk.Frame(relief=ttk.RAISED, borderwidth=1, bg="light grey")
+        container.pack(fill=ttk.BOTH, expand=True)
+
+        labelDescricao = ttk.Label(container, width=15, text="Descrição: ", bg="light grey")
+        labelDescricao.grid(column=0, row=0, padx=5, pady=0)
+
+        self.entryDescricao = ttk.Text(container, width=60, height=10)
+        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0)
 
 
 if __name__ == "__main__":
