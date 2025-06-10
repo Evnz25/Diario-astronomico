@@ -9,4 +9,4 @@ class Model():
     
     def qtd_registros(self):
         qtd_total = self.registros.count_documents({})
-        return(qtd_total)
+        return qtd_total

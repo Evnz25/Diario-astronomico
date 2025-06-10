@@ -1,7 +1,7 @@
 import sys
 import tkinter as ttk
 
-class anotacao_view():
+class Anotacao_view():
     def __init__(self):
         self.root = ttk.Tk()
         self.root.geometry("700x500")
@@ -83,4 +83,4 @@ class anotacao_view():
 
 
 if __name__ == "__main__":
-    anotacao_view()
+    Anotacao_view()
