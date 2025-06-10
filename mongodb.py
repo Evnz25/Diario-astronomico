@@ -13,8 +13,8 @@ mydict = {"Astro": "Costelação",
           "CoordenadasX": "-23.169614",
           "CoordenadasY": "-50.636040",
           "Equipamento": "Binóculo",
-          "Visibilidade": "5",
-          "EscalaBortle": "1",
+          "Visibilidade": 5,
+          "EscalaBortle": 1,
           "Descricao": "Registro da constelação de Órion de ponta cabeça"}
 
 
