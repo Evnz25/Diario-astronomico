@@ -21,9 +21,9 @@ class analise_view():
         self.labelQtd = ttk.Label(container, width=10, text="Número de registros: {Qtd}", bg="light grey")
         self.labelQtd.grid(column=0, row=0, padx=5, pady=5)
         
-        Qtd = self.controller.astro_mais_observado_controller()
+        Qtd = self.controller.media_visibilidade_controller()
         
-    def update_viewx(self, text):
+    def update_view(self, text):
         self.labelQtd['text'] = text
 
 if __name__ == "__main__":

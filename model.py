@@ -34,4 +34,18 @@ class Model():
         astro_comum_nome = astro_comum['_id']
         return astro_comum_nome
     
-    
+    def media_visibilidade(self):
+        pipeline = [
+            {
+                "$group": {
+                    "_id": None,
+                    "mediaVis": {
+                        "$avg": "$Visibilidade"
+                    }
+                }
+            }
+        ]
+
+        resultado = list(self.registros.aggregate(pipeline))
+        media = resultado[0]["mediaVis"]
+        return media

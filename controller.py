@@ -12,5 +12,9 @@ class Controller():
 
     def astro_mais_observado_controller(self):
         text = self.model.astro_mais_observado()
-        self.view.update_viewx(str(text))
+        self.view.update_view(str(text))
+
+    def media_visibilidade_controller(self):
+        text = self.model.media_visibilidade()
+        self.view.update_view(str(text))
         
