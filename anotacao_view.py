@@ -79,7 +79,7 @@ class Anotacao_view():
         labelDescricao.grid(column=0, row=0, padx=5, pady=0)
 
         self.entryDescricao = ttk.Text(container, width=60, height=10)
-        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0)
+        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0) 
 
 
 if __name__ == "__main__":

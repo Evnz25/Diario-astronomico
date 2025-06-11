@@ -61,4 +61,6 @@ class Model():
           "EscalaBortle": self.entryBortle.get(),
           "Descricao": self.entryDescricao.get()}
         
-        x = registros.insert_one(mydict)
+        x = self.registros.insert_one(mydict)
+
+
