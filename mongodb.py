@@ -21,7 +21,7 @@ x = registros.insert_one(mydict)
 
 mydict = {"Astro": "Costelação", 
           "Nome": "Costelação de Órion",
-          "Data": "25/04/2025",
+          "$Data": "2025-04-25",
           "Horário": "20:00",
           "CoordenadasX": "-23.169614",
           "CoordenadasY": "-50.636040",

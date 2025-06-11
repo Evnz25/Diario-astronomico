@@ -49,3 +49,16 @@ class Model():
         resultado = list(self.registros.aggregate(pipeline))
         media = resultado[0]["mediaVis"]
         return media
+
+    def salvar_registro(self):
+        mydict = {"Astro": self.entryAstro.get(), 
+          "Nome": self.entryNome.get(),
+          "Data": self.entryData.get(),
+          "Horário": self.entryHorario.get(),
+          "CoordenadasX": self.Coordenadas.get(),
+          "Equipamento": self.entryEquipamento.get(),
+          "Visibilidade": self.entryVisibiidade.get(),
+          "EscalaBortle": self.entryBortle.get(),
+          "Descricao": self.entryDescricao.get()}
+        
+        x = registros.insert_one(mydict)
