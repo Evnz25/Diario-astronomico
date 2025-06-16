@@ -1,10 +1,14 @@
 import sys
 import tkinter as ttk
 
+from controller import Controller
+
 class Anotacao_view():
     def __init__(self):
         self.root = ttk.Tk()
-        self.root.geometry("700x500")
+        self.root.geometry("1400x1400")
+
+        self.controller = Controller(self)
 
         self.anotacao_dadosbasico()
 
@@ -79,8 +83,27 @@ class Anotacao_view():
         labelDescricao.grid(column=0, row=0, padx=5, pady=0)
 
         self.entryDescricao = ttk.Text(container, width=60, height=10)
-        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0) 
+        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0)
 
+        buttonSalvar = ttk.Button(
+            container,
+            text="Salvar",
+            bg="Black",
+            fg="white",
+            command=self.salvar_registros)
+        buttonSalvar.grid(column=4, row=2, padx=50, pady=20, ipadx=7, ipady=3) 
+
+    def salvar_registros(self):
+        salvar_astro = self.entryAstro.get()
+        salvar_nomeregistro = self.entryNomeRegistro.get()
+        salvar_data = self.entryData.get()
+        salvar_horario = self.entryHorario.get()
+        salvar_coordenadas = self.entryCoordenadas.get()
+        salvar_equipamento = self.entryEquipamento.get()
+        salvar_visibilidade = self.visibilidade.get()
+        salvar_escalabortle = self.bortle.get()
+        salvar_descricao = self.entryDescricao.get("1.0", "end")
+        self.controller.salvar_registro_controller(salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao)
 
 if __name__ == "__main__":
     Anotacao_view()

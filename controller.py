@@ -5,6 +5,9 @@ class Controller():
         self.model = Model()
         
         self.view = view
+
+    def salvar_registro_controller(self, salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao):
+        self.model.salvar_registro(salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao)
         
     def qtd_registros_controller(self):
         text = self.model.qtd_registros()

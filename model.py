@@ -50,16 +50,16 @@ class Model():
         media = resultado[0]["mediaVis"]
         return media
 
-    def salvar_registro(self):
-        mydict = {"Astro": self.entryAstro.get(), 
-          "Nome": self.entryNome.get(),
-          "Data": self.entryData.get(),
-          "Horário": self.entryHorario.get(),
-          "CoordenadasX": self.Coordenadas.get(),
-          "Equipamento": self.entryEquipamento.get(),
-          "Visibilidade": self.entryVisibiidade.get(),
-          "EscalaBortle": self.entryBortle.get(),
-          "Descricao": self.entryDescricao.get()}
+    def salvar_registro(self, salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao):
+        mydict = {"Astro": salvar_astro, 
+          "Nome": salvar_nomeregistro,
+          "Data": salvar_data,
+          "Horário": salvar_horario,
+          "CoordenadasX": salvar_coordenadas,
+          "Equipamento": salvar_equipamento,
+          "Visibilidade": salvar_visibilidade,
+          "EscalaBortle": salvar_escalabortle,
+          "Descricao": salvar_descricao}
         
         x = self.registros.insert_one(mydict)
 

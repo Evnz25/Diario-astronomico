@@ -2,9 +2,9 @@ import sys
 import tkinter as ttk
 
 class telainicial_view():
-    def __init__(self):
+    def Tela_inicial(self):
         self.root = ttk.Tk()
-        self.root.geometry("700x500")
+        self.root.geometry("1400x1400")
 
         self.tela_inicial()
 
@@ -26,6 +26,3 @@ class telainicial_view():
         labelLinhaHori = ttk.Label(container, width=100, bg="black")
         labelLinhaHori.grid(column=0, row=2, columnspan=3)
 
-
-if __name__ == "__main__":
-    telainicial_view()
