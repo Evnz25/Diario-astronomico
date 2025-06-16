@@ -9,8 +9,8 @@ class View():
 
         self.controller = Controller(self)
 
-        self.container =  ttk.Frame(self.root, relief=ttk.RAISED, borderwidth=1, bg="light grey")
-        self.container.pack(fill=ttk.BOTH, expand=True)
+        self.container =  ttk.Frame(self.root)
+        self.container.pack()
 
         self.criar_tela_inicial()
         self.criar_tela_analise()
@@ -39,92 +39,92 @@ class View():
         self.tela_anotacao.tkraise()
 
     def criar_tela_inicial(self): 
-        self.tela_inicial = ttk.Frame(self.container)
+        container =  ttk.Frame(self.container,relief=ttk.RAISED, borderwidth=1, bg="light grey")
+        container.pack(fill=ttk.BOTH, expand=True)
 
-        labelTitulo = ttk.Label(self.container, width=15, text="Diário Astronômico", bg="light grey", font=("Inter", 25))
+        labelTitulo = ttk.Label(container, width=15, text="Diário Astronômico", bg="light grey", font=("Inter", 25))
         labelTitulo.grid(column=0, row=0, padx=30, pady=0)
 
-        buttonRegistro = ttk.Button(self.container, text="Fazer registro", bg="Black", fg="white")
+        buttonRegistro = ttk.Button(container, text="Fazer registro", bg="Black", fg="white")
         buttonRegistro.grid(column=0, row=1, padx=50, pady=20)
         
-        buttonAnalise = ttk.Button(self.container, text="Ver análise", bg="Black", fg="white")
+        buttonAnalise = ttk.Button(container, text="Ver análise", bg="Black", fg="white")
         buttonAnalise.grid(column=1, row=1, padx=50, pady=20)
 
-        labelLinhaHori = ttk.Label(self.container, width=100, bg="black")
+        labelLinhaHori = ttk.Label(container, width=100, bg="black")
         labelLinhaHori.grid(column=0, row=2, columnspan=3)
 
     def criar_tela_analise(self):
-        self.tela_analise = ttk.Frame(self.container)
+        container =  ttk.Frame(self.container, relief=ttk.RAISED, borderwidth=1, bg="light grey")
+        container.pack(fill=ttk.BOTH, expand=True)
             
-        self.labelQtd = ttk.Label(self.container, width=10, text="Número de registros: {Qtd}", bg="light grey")
+        self.labelQtd = ttk.Label(container, width=10, text="Número de registros: {Qtd}", bg="light grey")
         self.labelQtd.grid(column=0, row=0, padx=5, pady=5)
             
         #Qtd = self.controller.media_visibilidade_controller()
     
     def criar_tela_anotacao(self):
-        self.tela_anotacao = ttk.Frame(self.container)
+        container =  ttk.Frame(self.container, relief=ttk.RAISED, borderwidth=1, bg="light grey")
+        container.pack(fill=ttk.BOTH, expand=True)
 
-        labelAstro = ttk.Label(self.container, width=10, text="Astros: ", bg="light grey")
+        labelAstro = ttk.Label(container, width=10, text="Astros: ", bg="light grey")
         labelAstro.grid(column=0, row=0, padx=5, pady=5)
 
-        self.entryAstro = ttk.Entry(self.container, width=20)
+        self.entryAstro = ttk.Entry(container, width=20)
         self.entryAstro.grid(column=1, row=0, padx=0, pady=5)
 
-        labelNomeRegistro = ttk.Label(self.container, width=15, text="Nome do registro: ", bg="light grey")
+        labelNomeRegistro = ttk.Label(container, width=15, text="Nome do registro: ", bg="light grey")
         labelNomeRegistro.grid(column=0, row=1, padx=5, pady=5)
 
-        self.entryNomeRegistro = ttk.Entry(self.container, width=20)
+        self.entryNomeRegistro = ttk.Entry(container, width=20)
         self.entryNomeRegistro.grid(column=1, row=1, padx=0, pady=5)
 
-        labelData = ttk.Label(self.container, width=15, text="Data: ", bg="light grey")
+        labelData = ttk.Label(container, width=15, text="Data: ", bg="light grey")
         labelData.grid(column=0, row=2, padx=5, pady=5)
 
-        self.entryData = ttk.Entry(self.container, width=20)
+        self.entryData = ttk.Entry(container, width=20)
         self.entryData.grid(column=1, row=2, padx=0, pady=5)
 
-        labelHorario = ttk.Label(self.container, width=15, text="Horario: ", bg="light grey")
+        labelHorario = ttk.Label(container, width=15, text="Horario: ", bg="light grey")
         labelHorario.grid(column=0, row=3, padx=5, pady=5)
 
-        self.entryHorario = ttk.Entry(self.container, width=20)
+        self.entryHorario = ttk.Entry(container, width=20)
         self.entryHorario.grid(column=1, row=3, padx=0, pady=5)
 
-        labelCoordenadas = ttk.Label(self.container, width=15, text="Coordenas: ", bg="light grey")
+        labelCoordenadas = ttk.Label(container, width=15, text="Coordenas: ", bg="light grey")
         labelCoordenadas.grid(column=0, row=4, padx=5, pady=5)
 
-        self.entryCoordenadas = ttk.Entry(self.container, width=20)
+        self.entryCoordenadas = ttk.Entry(container, width=20)
         self.entryCoordenadas.grid(column=1, row=4, padx=0, pady=5)
 
-        labelEquipamento = ttk.Label(self.container, width=15, text="Equipamento: ", bg="light grey")
+        labelEquipamento = ttk.Label(container, width=15, text="Equipamento: ", bg="light grey")
         labelEquipamento.grid(column=0, row=5, padx=5, pady=5)
 
-        self.entryEquipamento = ttk.Entry(self.container, width=20)
+        self.entryEquipamento = ttk.Entry(container, width=20)
         self.entryEquipamento.grid(column=1, row=5, padx=0, pady=5)
 
-        labelVisibilidade = ttk.Label(self.container, width=15, text="Visibilidade: ", bg="light grey")
+        labelVisibilidade = ttk.Label(container, width=15, text="Visibilidade: ", bg="light grey")
         labelVisibilidade.grid(column=0, row=6, padx=5, pady=5)
 
         self.visibilidade = ttk.DoubleVar()
 
-        escalaVisibilidade = ttk.Scale(self.container, from_=1, to=5, width=12, length=160, variable=self.visibilidade,
+        escalaVisibilidade = ttk.Scale(container, from_=1, to=5, width=12, length=160, variable=self.visibilidade,
                                        orient=ttk.HORIZONTAL, bg="light grey")
         escalaVisibilidade.grid(column=1, row=6, padx=0, pady=5)
 
-        labelBortle = ttk.Label(self.container, width=15, text="Escala Bortle: ", bg="light grey")
+        labelBortle = ttk.Label(container, width=15, text="Escala Bortle: ", bg="light grey")
         labelBortle.grid(column=0, row=7, padx=5, pady=5)
 
         self.bortle = ttk.DoubleVar()
 
-        escalaBortle = ttk.Scale(self.container, from_=1, to=8, width=12, length=200, variable=self.bortle,
+        escalaBortle = ttk.Scale(container, from_=1, to=8, width=12, length=200, variable=self.bortle,
                                        orient=ttk.HORIZONTAL, bg="light grey")
         escalaBortle.grid(column=1, row=7, padx=0, pady=5)
 
-        container = ttk.Frame(relief=ttk.RAISED, borderwidth=1, bg="light grey")
-        container.pack(fill=ttk.BOTH, expand=True)
-
-        labelDescricao = ttk.Label(self.container, width=15, text="Descrição: ", bg="light grey")
+        labelDescricao = ttk.Label(container, width=15, text="Descrição: ", bg="light grey")
         labelDescricao.grid(column=0, row=0, padx=5, pady=0)
 
-        self.entryDescricao = ttk.Text(self.container, width=60, height=10)
+        self.entryDescricao = ttk.Text(container, width=60, height=10)
         self.entryDescricao.grid(column=1, row=1, padx=5, pady=0)
 
         buttonSalvar = ttk.Button(
