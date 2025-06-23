@@ -1,7 +1,9 @@
 import sys
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 from controller import Controller
+from PIL import Image, ImageTk
 
 class View():
     def __init__(self):
@@ -89,7 +91,7 @@ class View():
         btn_analise.pack(side="left", padx=10)
 
         # --- 2. Linha Separadora ---
-        separator = tk.Frame(self.tela_inicial, height=2, bg="black")
+        separator = tk.Frame(self.tela_inicial, height=20, bg="black")
         separator.pack(fill='x')
 
 
@@ -184,73 +186,87 @@ class View():
 
         # --- Linha 1: Astros ---
         ttk.Label(form_container, text="Astros:").grid(row=0, column=0, sticky="w", pady=5)
-        self.entry_astro = ttk.Entry(form_container)
-        self.entry_astro.grid(row=0, column=1, columnspan=3, sticky="ew", padx=(5, 0))
+        self.entryAstro = ttk.Entry(form_container)
+        self.entryAstro.grid(row=0, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
         # --- Linha 2: Nome do registro ---
         ttk.Label(form_container, text="Nome do registro:").grid(row=1, column=0, sticky="w", pady=5)
-        self.entry_nome_registro = ttk.Entry(form_container)
-        self.entry_nome_registro.grid(row=1, column=1, columnspan=3, sticky="ew", padx=(5, 0))
+        self.entryNomeRegistro = ttk.Entry(form_container)
+        self.entryNomeRegistro.grid(row=1, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
         # --- Linha 3: Data e Horário ---
         ttk.Label(form_container, text="Data:").grid(row=2, column=0, sticky="w", pady=5)
-        self.entry_data = ttk.Entry(form_container)
-        self.entry_data.grid(row=2, column=1, sticky="ew", padx=5)
+        self.entryData = ttk.Entry(form_container)
+        self.entryData.grid(row=2, column=1, sticky="ew", padx=5)
 
         ttk.Label(form_container, text="Horário:").grid(row=2, column=2, sticky="w", pady=5)
-        self.entry_horario = ttk.Entry(form_container)
-        self.entry_horario.grid(row=2, column=3, sticky="ew", padx=5)
+        self.entryHorario = ttk.Entry(form_container)
+        self.entryHorario.grid(row=2, column=3, sticky="ew", padx=5)
 
         # --- Linha 4: Coordenadas ---
         ttk.Label(form_container, text="Coordenadas").grid(row=3, column=0, sticky="w", pady=5)
         ttk.Label(form_container, text="X:").grid(row=3, column=0, sticky="e", padx=(0,5))
-        self.entry_coord_x = ttk.Entry(form_container)
-        self.entry_coord_x.grid(row=3, column=1, sticky="ew", padx=5)
+        self.entryCoordenadasX = ttk.Entry(form_container)
+        self.entryCoordenadasX.grid(row=3, column=1, sticky="ew", padx=5)
 
         ttk.Label(form_container, text="Y:").grid(row=3, column=2, sticky="w", pady=5)
-        self.entry_coord_y = ttk.Entry(form_container)
-        self.entry_coord_y.grid(row=3, column=3, sticky="ew", padx=5)
+        self.entryCoordenadasY = ttk.Entry(form_container)
+        self.entryCoordenadasY.grid(row=3, column=3, sticky="ew", padx=5)
         
         # --- Linha 5: Equipamento ---
         ttk.Label(form_container, text="Equipamento:").grid(row=4, column=0, sticky="w", pady=5)
-        self.entry_equipamento = ttk.Entry(form_container)
-        self.entry_equipamento.grid(row=4, column=1, columnspan=3, sticky="ew", padx=(5, 0))
+        self.entryEquipamento = ttk.Entry(form_container)
+        self.entryEquipamento.grid(row=4, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
         # --- Linha 6: Visibilidade ---
         ttk.Label(form_container, text="Visibilidade:").grid(row=5, column=0, sticky="w", pady=5)
-        self.var_visibilidade = tk.DoubleVar(value=5)
-        self.scale_visibilidade = ttk.Scale(form_container, from_=1, to=5, variable=self.var_visibilidade)
+        self.visibilidade = tk.DoubleVar()
+        self.scale_visibilidade = ttk.Scale(form_container, from_=1, to=5, variable=self.visibilidade)
         self.scale_visibilidade.grid(row=5, column=1, columnspan=2, sticky="ew", padx=5)
-        self.spin_visibilidade = ttk.Spinbox(form_container, from_=1, to=5, textvariable=self.var_visibilidade, width=5)
+        self.spin_visibilidade = ttk.Spinbox(form_container, from_=1, to=5, textvariable=self.visibilidade, width=5)
         self.spin_visibilidade.grid(row=5, column=3, sticky="w")
         
         # --- Linha 7: Escala de Bortle ---
         ttk.Label(form_container, text="Escala de Bortle:").grid(row=6, column=0, sticky="w", pady=5)
-        self.var_bortle = tk.DoubleVar(value=8)
-        self.scale_bortle = ttk.Scale(form_container, from_=1, to=9, variable=self.var_bortle) # Escala Bortle vai de 1 a 9
+        self.bortle = tk.DoubleVar(value=8)
+        self.scale_bortle = ttk.Scale(form_container, from_=1, to=9, variable=self.bortle) # Escala Bortle vai de 1 a 9
         self.scale_bortle.grid(row=6, column=1, columnspan=2, sticky="ew", padx=5)
-        self.spin_bortle = ttk.Spinbox(form_container, from_=1, to=9, textvariable=self.var_bortle, width=5)
+        self.spin_bortle = ttk.Spinbox(form_container, from_=1, to=8, textvariable=self.bortle, width=5)
         self.spin_bortle.grid(row=6, column=3, sticky="w")
         
         # --- Linha 8: Descrição ---
         ttk.Label(form_container, text="Descrição:").grid(row=7, column=0, sticky="nw", pady=(15, 5))
-        self.text_descricao = tk.Text(form_container, height=8, relief="solid", borderwidth=1)
-        self.text_descricao.grid(row=8, column=0, columnspan=4, sticky="nsew")
+        self.entryDescricao = tk.Text(form_container, height=8, relief="solid", borderwidth=1)
+        self.entryDescricao.grid(row=8, column=0, columnspan=4, sticky="nsew")
 
         # --- Área da Imagem (lado direito) ---
-        ttk.Button(form_container, text="Adicionar imagem").grid(row=0, column=4, sticky="ne", padx=10, pady=5)
+        ttk.Button(form_container, text="Adicionar imagem", command=self.upload_image).grid(row=0, column=4, sticky="ne", padx=10, pady=5)
         self.img_placeholder = tk.Frame(form_container, width=200, height=150, bg="white", relief="solid", borderwidth=1)
         self.img_placeholder.grid(row=1, column=4, rowspan=4, sticky="nsew", padx=10, pady=5)
 
         # --- Botão de Cadastrar (na parte de baixo) ---
-        self.btn_cadastrar = ttk.Button(self.tela_anotacao, text="Cadastrar")
+        self.btn_cadastrar = ttk.Button(self.tela_anotacao, text="Cadastrar", command=self.salvar_registros)
         self.btn_cadastrar.pack(side="bottom", pady=(0, 10))
 
     def salvar_registros(self):
+        print("Salvando")
+        salvar_caminho_img = self.file_path
         salvar_astro = self.entryAstro.get()
-        print(f"Salvando o astro: {salvar_astro}")
-        # Lógica de salvamento e depois, talvez, voltar para a tela inicial
+        salvar_nomeregistro = self.entryNomeRegistro.get()
+        salvar_data = self.entryData.get()
+        salvar_horario = self.entryHorario.get()
+        salvar_coordenadasX = self.entryCoordenadasX.get()
+        salvar_coordenadasY = self.entryCoordenadasY.get()
+        salvar_equipamento = self.entryEquipamento.get()
+        salvar_visibilidade = self.visibilidade.get()
+        salvar_escalabortle = self.bortle.get()
+        salvar_descricao = self.entryDescricao.get("1.0", "end")
+        self.controller.salvar_registro_controller(salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadasX, salvar_coordenadasY, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao, salvar_caminho_img)
+
         self.mostrar_tela_inicial()
+
+    def upload_image(self):
+        self.file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png")])
         
 if __name__ == "__main__":
     View()
