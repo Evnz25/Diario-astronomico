@@ -94,6 +94,8 @@ class View():
         separator = tk.Frame(self.tela_inicial, height=20, bg="black")
         separator.pack(fill='x')
 
+        
+
 
     def criar_tela_analise(self):
         # --- Configuração do Frame principal da tela ---

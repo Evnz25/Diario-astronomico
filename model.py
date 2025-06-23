@@ -63,6 +63,6 @@ class Model():
           "Descricao": salvar_descricao,
           "Caminho_img": salvar_caminho_img}
         
-        x = self.registros.insert_one(mydict)
+        x = self.registros.insert_one(mydict)    
 
 

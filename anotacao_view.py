@@ -105,5 +105,6 @@ class Anotacao_view():
         salvar_descricao = self.entryDescricao.get("1.0", "end")
         self.controller.salvar_registro_controller(salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao)
 
+
 if __name__ == "__main__":
     Anotacao_view()
