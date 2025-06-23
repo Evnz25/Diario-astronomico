@@ -1,152 +1,256 @@
 import sys
-import tkinter as ttk
+import tkinter as tk
+from tkinter import ttk
 from controller import Controller
 
 class View():
     def __init__(self):
-        self.root = ttk.Tk()
-        self.root.geometry("1400x1400")
+        self.root = tk.Tk()
+        self.root.title("Diário Astronômico (Versão Original Corrigida)")
+        self.root.geometry("800x600")
 
         self.controller = Controller(self)
 
-        self.container =  ttk.Frame(self.root)
-        self.container.pack()
+        # 1. Container principal que vai segurar as telas empilhadas
+        # Usamos 'grid' aqui para permitir que as telas sobrepostas preencham o espaço.
+        self.container = tk.Frame(self.root)
+        self.container.pack(fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
+        # 2. Chamar a criação de cada tela, uma por uma
         self.criar_tela_inicial()
         self.criar_tela_analise()
         self.criar_tela_anotacao()
-
-        self.tela_inicial.grid(row=0, column=0, sticky='nsew')
-        self.tela_analise.grid(row=0, column=0, sticky='nsew')
-        self.tela_anotacao.grid(row=0, column=0, sticky='nsew')
-
+        
+        # 3. Mostrar a tela inicial primeiro
         self.mostrar_tela_inicial()
 
         self.root.bind('<Escape>', self.fechar)
-
         self.root.mainloop()
 
-    def fechar(self):
+    def fechar(self, event=None):
         sys.exit()
 
+    # --- Funções para trocar de tela ---
     def mostrar_tela_inicial(self):
         self.tela_inicial.tkraise()
     
     def mostrar_tela_analise(self):
-        self.tela_analise.tkraise()
+        # Aqui você pode adicionar lógica para atualizar os dados antes de mostrar
+        print("Mostrando tela de análise...")
+        self.tela_analise_container.tkraise()
 
     def mostrar_tela_anotacao(self):
         self.tela_anotacao.tkraise()
 
-    def criar_tela_inicial(self): 
-        container =  ttk.Frame(self.container,relief=ttk.RAISED, borderwidth=1, bg="light grey")
-        container.pack(fill=ttk.BOTH, expand=True)
+    # --- Métodos para criar cada tela ---
+    def criar_tela_inicial(self):
+            # --- Configuração do Frame principal da tela ---
+        self.tela_inicial = tk.Frame(self.container, bg="#F0F0F0")
+        self.tela_inicial.grid(row=0, column=0, sticky='nsew')
 
-        labelTitulo = ttk.Label(container, width=15, text="Diário Astronômico", bg="light grey", font=("Inter", 25))
-        labelTitulo.grid(column=0, row=0, padx=30, pady=0)
+        # --- 1. Seção do Cabeçalho ---
+        header_frame = tk.Frame(self.tela_inicial, bg="#F0F0F0")
+        header_frame.pack(pady=20, padx=40, fill='x')
 
-        buttonRegistro = ttk.Button(container, text="Fazer registro", bg="Black", fg="white")
-        buttonRegistro.grid(column=0, row=1, padx=50, pady=20)
+        label_titulo = ttk.Label(header_frame, text="Diário Astronômico", 
+                                font=("Inter", 28, "bold"), background="#F0F0F0")
+        label_titulo.pack(anchor='w')
         
-        buttonAnalise = ttk.Button(container, text="Ver análise", bg="Black", fg="white")
-        buttonAnalise.grid(column=1, row=1, padx=50, pady=20)
+        botoes_frame = tk.Frame(header_frame, bg="#F0F0F0")
+        botoes_frame.pack(anchor='w', pady=15)
 
-        labelLinhaHori = ttk.Label(container, width=100, bg="black")
-        labelLinhaHori.grid(column=0, row=2, columnspan=3)
+        # --- CORREÇÃO NO ESTILO DOS BOTÕES ---
+        style = ttk.Style()
+        # Força o uso do tema 'clam', que é mais customizável em todos os sistemas
+        try:
+            style.theme_use('clam')
+        except tk.TclError:
+            # Se 'clam' não estiver disponível, usa o padrão
+            pass
+
+        style.configure("Dark.TButton",
+                        background="#333333",
+                        foreground="white",
+                        font=("Inter", 10, "bold"),
+                        padding=(15, 8),
+                        bordercolor="#333333") # Garante que a borda tenha a mesma cor
+        style.map("Dark.TButton",
+                background=[('active', '#555555')],
+                bordercolor=[('active', '#555555')])
+
+        btn_registro = ttk.Button(botoes_frame, text="Fazer registro", style="Dark.TButton",
+                                command=self.mostrar_tela_anotacao)
+        btn_registro.pack(side="left")
+
+        btn_analise = ttk.Button(botoes_frame, text="Ver análise", style="Dark.TButton",
+                                command=self.mostrar_tela_analise)
+        btn_analise.pack(side="left", padx=10)
+
+        # --- 2. Linha Separadora ---
+        separator = tk.Frame(self.tela_inicial, height=2, bg="black")
+        separator.pack(fill='x')
+
 
     def criar_tela_analise(self):
-        container =  ttk.Frame(self.container, relief=ttk.RAISED, borderwidth=1, bg="light grey")
-        container.pack(fill=ttk.BOTH, expand=True)
-            
-        self.labelQtd = ttk.Label(container, width=10, text="Número de registros: {Qtd}", bg="light grey")
-        self.labelQtd.grid(column=0, row=0, padx=5, pady=5)
-            
-        #Qtd = self.controller.media_visibilidade_controller()
-    
+        # --- Configuração do Frame principal da tela ---
+        # Usamos um Frame com padding para criar a borda azul ao redor
+        self.tela_analise_container = tk.Frame(self.container, bg="#0078D7", bd=2)
+        self.tela_analise_container.grid(row=0, column=0, sticky='nsew')
+        
+        self.tela_analise = tk.Frame(self.tela_analise_container, bg="#F0F0F0")
+        self.tela_analise.pack(fill="both", expand=True, padx=1, pady=1)
+
+        # --- Container principal para o conteúdo, com rolagem ---
+        # Isso garante que se o conteúdo for muito grande, o usuário pode rolar
+        canvas = tk.Canvas(self.tela_analise, bg="#F0F0F0", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(self.tela_analise, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#F0F0F0")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        # --- 1. Cartão de Dados Gerais ---
+        card_dados_gerais = tk.Frame(scrollable_frame, bg="white", relief="solid", bd=1, highlightbackground="#D0D0D0", highlightthickness=1)
+        card_dados_gerais.pack(pady=(20, 10), padx=40, fill='x')
+        
+        content_gerais = tk.Frame(card_dados_gerais, bg="white")
+        content_gerais.pack(padx=20, pady=15, anchor="w")
+
+        ttk.Label(content_gerais, text="Dados gerais", font=("Inter", 14, "bold"), background="white").pack(anchor='w', pady=(0, 10))
+        ttk.Label(content_gerais, text="Número de registros: 2", font=("Inter", 11), background="white").pack(anchor='w')
+        ttk.Label(content_gerais, text="Astro mais observado: Constelações", font=("Inter", 11), background="white").pack(anchor='w')
+        ttk.Label(content_gerais, text="Mês de mais observação: Abril", font=("Inter", 11), background="white").pack(anchor='w')
+
+        # --- 2. Cartão de Visibilidade ---
+        card_visibilidade = tk.Frame(scrollable_frame, bg="white", relief="solid", bd=1, highlightbackground="#D0D0D0", highlightthickness=1)
+        card_visibilidade.pack(pady=10, padx=40, fill='x')
+
+        content_visibilidade = tk.Frame(card_visibilidade, bg="white")
+        content_visibilidade.pack(padx=20, pady=15, anchor="w")
+
+        ttk.Label(content_visibilidade, text="visibilidade", font=("Inter", 14, "bold"), background="white").pack(anchor='w', pady=(0, 10))
+        ttk.Label(content_visibilidade, text="visibilidade média: 5", font=("Inter", 11), background="white").pack(anchor='w')
+        ttk.Label(content_visibilidade, text="Mês de melhor visibilidade: Abril", font=("Inter", 11), background="white").pack(anchor='w', pady=(0, 5))
+
+        # Frame para a barra de Bortle
+        bortle_frame = tk.Frame(content_visibilidade, bg="white")
+        bortle_frame.pack(fill="x", pady=5)
+        ttk.Label(bortle_frame, text="Localizações pela escala Bortle:", font=("Inter", 11), background="white").pack(side="left", anchor='w')
+        
+        # Barra de progresso para simular a escala
+        style_bortle = ttk.Style()
+        style_bortle.configure("Bortle.Horizontal.TProgressbar", troughcolor='#E0E0E0', background='#5DADE2', thickness=20)
+        bortle_bar = ttk.Progressbar(bortle_frame, orient="horizontal", length=300, mode='determinate', style="Bortle.Horizontal.TProgressbar")
+        bortle_bar['value'] = 40 # Exemplo de valor
+        bortle_bar.pack(side="left", padx=10, expand=True, fill="x")
+        
+        # Exemplo de coordenadas (usando um Text para permitir seleção)
+        coord_text = tk.Text(content_visibilidade, height=2, width=60, relief="flat", background="white", font=("Courier", 9))
+        coord_text.insert("1.0", "X: -23.169614, Y: -50.636040; X: -24.176355, Y: -53.042433")
+        coord_text.configure(state="disabled") # Para não ser editável
+        coord_text.pack(anchor="w", pady=5)
+
+        # --- 3. Anotação de melhor visibilidade ---
+        melhor_anotacao_frame = tk.Frame(scrollable_frame, bg="#F0F0F0")
+        melhor_anotacao_frame.pack(pady=(20, 10), padx=40, fill='x')
+
     def criar_tela_anotacao(self):
-        container =  ttk.Frame(self.container, relief=ttk.RAISED, borderwidth=1, bg="light grey")
-        container.pack(fill=ttk.BOTH, expand=True)
+        # Frame principal da tela, com uma cor de fundo cinza clara
+        self.tela_anotacao = tk.Frame(self.container, bg="#E0E0E0")
+        self.tela_anotacao.grid(row=0, column=0, sticky='nsew')
 
-        labelAstro = ttk.Label(container, width=10, text="Astros: ", bg="light grey")
-        labelAstro.grid(column=0, row=0, padx=5, pady=5)
+        # --- Frame para conter o formulário com padding ---
+        # Isso ajuda a manter as bordas da janela livres
+        form_container = ttk.Frame(self.tela_anotacao, style="TFrame")
+        form_container.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.entryAstro = ttk.Entry(container, width=20)
-        self.entryAstro.grid(column=1, row=0, padx=0, pady=5)
+        # Configurar o grid para que as colunas de entrada de texto se expandam
+        form_container.grid_columnconfigure(1, weight=1)
+        form_container.grid_columnconfigure(3, weight=1)
+        form_container.grid_columnconfigure(4, weight=1)
+        form_container.grid_rowconfigure(8, weight=1) # Permite que a descrição se expanda verticalmente
 
-        labelNomeRegistro = ttk.Label(container, width=15, text="Nome do registro: ", bg="light grey")
-        labelNomeRegistro.grid(column=0, row=1, padx=5, pady=5)
+        # --- Linha 1: Astros ---
+        ttk.Label(form_container, text="Astros:").grid(row=0, column=0, sticky="w", pady=5)
+        self.entry_astro = ttk.Entry(form_container)
+        self.entry_astro.grid(row=0, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
-        self.entryNomeRegistro = ttk.Entry(container, width=20)
-        self.entryNomeRegistro.grid(column=1, row=1, padx=0, pady=5)
+        # --- Linha 2: Nome do registro ---
+        ttk.Label(form_container, text="Nome do registro:").grid(row=1, column=0, sticky="w", pady=5)
+        self.entry_nome_registro = ttk.Entry(form_container)
+        self.entry_nome_registro.grid(row=1, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
-        labelData = ttk.Label(container, width=15, text="Data: ", bg="light grey")
-        labelData.grid(column=0, row=2, padx=5, pady=5)
+        # --- Linha 3: Data e Horário ---
+        ttk.Label(form_container, text="Data:").grid(row=2, column=0, sticky="w", pady=5)
+        self.entry_data = ttk.Entry(form_container)
+        self.entry_data.grid(row=2, column=1, sticky="ew", padx=5)
 
-        self.entryData = ttk.Entry(container, width=20)
-        self.entryData.grid(column=1, row=2, padx=0, pady=5)
+        ttk.Label(form_container, text="Horário:").grid(row=2, column=2, sticky="w", pady=5)
+        self.entry_horario = ttk.Entry(form_container)
+        self.entry_horario.grid(row=2, column=3, sticky="ew", padx=5)
 
-        labelHorario = ttk.Label(container, width=15, text="Horario: ", bg="light grey")
-        labelHorario.grid(column=0, row=3, padx=5, pady=5)
+        # --- Linha 4: Coordenadas ---
+        ttk.Label(form_container, text="Coordenadas").grid(row=3, column=0, sticky="w", pady=5)
+        ttk.Label(form_container, text="X:").grid(row=3, column=0, sticky="e", padx=(0,5))
+        self.entry_coord_x = ttk.Entry(form_container)
+        self.entry_coord_x.grid(row=3, column=1, sticky="ew", padx=5)
 
-        self.entryHorario = ttk.Entry(container, width=20)
-        self.entryHorario.grid(column=1, row=3, padx=0, pady=5)
+        ttk.Label(form_container, text="Y:").grid(row=3, column=2, sticky="w", pady=5)
+        self.entry_coord_y = ttk.Entry(form_container)
+        self.entry_coord_y.grid(row=3, column=3, sticky="ew", padx=5)
+        
+        # --- Linha 5: Equipamento ---
+        ttk.Label(form_container, text="Equipamento:").grid(row=4, column=0, sticky="w", pady=5)
+        self.entry_equipamento = ttk.Entry(form_container)
+        self.entry_equipamento.grid(row=4, column=1, columnspan=3, sticky="ew", padx=(5, 0))
 
-        labelCoordenadas = ttk.Label(container, width=15, text="Coordenas: ", bg="light grey")
-        labelCoordenadas.grid(column=0, row=4, padx=5, pady=5)
+        # --- Linha 6: Visibilidade ---
+        ttk.Label(form_container, text="Visibilidade:").grid(row=5, column=0, sticky="w", pady=5)
+        self.var_visibilidade = tk.DoubleVar(value=5)
+        self.scale_visibilidade = ttk.Scale(form_container, from_=1, to=5, variable=self.var_visibilidade)
+        self.scale_visibilidade.grid(row=5, column=1, columnspan=2, sticky="ew", padx=5)
+        self.spin_visibilidade = ttk.Spinbox(form_container, from_=1, to=5, textvariable=self.var_visibilidade, width=5)
+        self.spin_visibilidade.grid(row=5, column=3, sticky="w")
+        
+        # --- Linha 7: Escala de Bortle ---
+        ttk.Label(form_container, text="Escala de Bortle:").grid(row=6, column=0, sticky="w", pady=5)
+        self.var_bortle = tk.DoubleVar(value=8)
+        self.scale_bortle = ttk.Scale(form_container, from_=1, to=9, variable=self.var_bortle) # Escala Bortle vai de 1 a 9
+        self.scale_bortle.grid(row=6, column=1, columnspan=2, sticky="ew", padx=5)
+        self.spin_bortle = ttk.Spinbox(form_container, from_=1, to=9, textvariable=self.var_bortle, width=5)
+        self.spin_bortle.grid(row=6, column=3, sticky="w")
+        
+        # --- Linha 8: Descrição ---
+        ttk.Label(form_container, text="Descrição:").grid(row=7, column=0, sticky="nw", pady=(15, 5))
+        self.text_descricao = tk.Text(form_container, height=8, relief="solid", borderwidth=1)
+        self.text_descricao.grid(row=8, column=0, columnspan=4, sticky="nsew")
 
-        self.entryCoordenadas = ttk.Entry(container, width=20)
-        self.entryCoordenadas.grid(column=1, row=4, padx=0, pady=5)
+        # --- Área da Imagem (lado direito) ---
+        ttk.Button(form_container, text="Adicionar imagem").grid(row=0, column=4, sticky="ne", padx=10, pady=5)
+        self.img_placeholder = tk.Frame(form_container, width=200, height=150, bg="white", relief="solid", borderwidth=1)
+        self.img_placeholder.grid(row=1, column=4, rowspan=4, sticky="nsew", padx=10, pady=5)
 
-        labelEquipamento = ttk.Label(container, width=15, text="Equipamento: ", bg="light grey")
-        labelEquipamento.grid(column=0, row=5, padx=5, pady=5)
-
-        self.entryEquipamento = ttk.Entry(container, width=20)
-        self.entryEquipamento.grid(column=1, row=5, padx=0, pady=5)
-
-        labelVisibilidade = ttk.Label(container, width=15, text="Visibilidade: ", bg="light grey")
-        labelVisibilidade.grid(column=0, row=6, padx=5, pady=5)
-
-        self.visibilidade = ttk.DoubleVar()
-
-        escalaVisibilidade = ttk.Scale(container, from_=1, to=5, width=12, length=160, variable=self.visibilidade,
-                                       orient=ttk.HORIZONTAL, bg="light grey")
-        escalaVisibilidade.grid(column=1, row=6, padx=0, pady=5)
-
-        labelBortle = ttk.Label(container, width=15, text="Escala Bortle: ", bg="light grey")
-        labelBortle.grid(column=0, row=7, padx=5, pady=5)
-
-        self.bortle = ttk.DoubleVar()
-
-        escalaBortle = ttk.Scale(container, from_=1, to=8, width=12, length=200, variable=self.bortle,
-                                       orient=ttk.HORIZONTAL, bg="light grey")
-        escalaBortle.grid(column=1, row=7, padx=0, pady=5)
-
-        labelDescricao = ttk.Label(container, width=15, text="Descrição: ", bg="light grey")
-        labelDescricao.grid(column=0, row=0, padx=5, pady=0)
-
-        self.entryDescricao = ttk.Text(container, width=60, height=10)
-        self.entryDescricao.grid(column=1, row=1, padx=5, pady=0)
-
-        buttonSalvar = ttk.Button(
-            container,
-            text="Salvar",
-            bg="Black",
-            fg="white",
-            command=self.salvar_registros)
-        buttonSalvar.grid(column=4, row=2, padx=50, pady=20, ipadx=7, ipady=3) 
+        # --- Botão de Cadastrar (na parte de baixo) ---
+        self.btn_cadastrar = ttk.Button(self.tela_anotacao, text="Cadastrar")
+        self.btn_cadastrar.pack(side="bottom", pady=(0, 10))
 
     def salvar_registros(self):
         salvar_astro = self.entryAstro.get()
-        salvar_nomeregistro = self.entryNomeRegistro.get()
-        salvar_data = self.entryData.get()
-        salvar_horario = self.entryHorario.get()
-        salvar_coordenadas = self.entryCoordenadas.get()
-        salvar_equipamento = self.entryEquipamento.get()
-        salvar_visibilidade = self.visibilidade.get()
-        salvar_escalabortle = self.bortle.get()
-        salvar_descricao = self.entryDescricao.get("1.0", "end")
-        self.controller.salvar_registro_controller(salvar_astro, salvar_nomeregistro, salvar_data, salvar_horario, salvar_coordenadas, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao)
-
-
+        print(f"Salvando o astro: {salvar_astro}")
+        # Lógica de salvamento e depois, talvez, voltar para a tela inicial
+        self.mostrar_tela_inicial()
+        
 if __name__ == "__main__":
     View()
