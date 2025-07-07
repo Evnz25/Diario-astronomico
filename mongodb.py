@@ -6,36 +6,44 @@ db = meucliente["DiaAstro"]
 
 registros = db["registros"]
 
-mydict = {"Astro": "Costelação", 
+insercao = {"Astro": "Costelação", 
           "Nome": "Costelação de Órion",
-          "Data": "25/04/2025",
-          "Horário": "20:00",
+          "Data": "25/06/2025 21:30",
+          "Cidade": "Londrina",
           "CoordenadasX": "-23.169614",
           "CoordenadasY": "-50.636040",
           "Equipamento": "Binóculo",
           "Visibilidade": 5,
           "EscalaBortle": 1,
-          "Descricao": "Registro da constelação de Órion de ponta cabeça"}
+          "Descricao": "Registro da constelação de Órion de ponta cabeça",
+          "Caminho_img": r"C:\Users\Usuario\Desktop\Backup area de trabalho\Tads\Diário Astronômico\Astronomical-Diary\Imagens\Costelacao.png"}
 
-x = registros.insert_one(mydict)
+x = registros.insert_one(insercao)
 
-mydict = {"Astro": "Costelação", 
-          "Nome": "Costelação de Órion",
-          "$Data": "2025-04-25",
-          "Horário": "20:00",
-          "CoordenadasX": "-23.169614",
-          "CoordenadasY": "-50.636040",
-          "Equipamento": "Binóculo",
-          "Visibilidade": 2,
-          "EscalaBortle": 1,
-          "Descricao": "Registro da constelação de Órion de ponta cabeça"}
+insercao = {
+    "Astro": "Planeta", 
+    "Nome": "Júpiter e suas Luas Galileanas",
+    "Data": "15/06/2025 21:30",
+    "Cidade": "Cambé",
+    "CoordenadasX": "-22.424319",
+    "CoordenadasY": "-45.453345",
+    "Equipamento": "Telescópio refletor 130mm",
+    "Visibilidade": 4,
+    "EscalaBortle": 4,
+    "Descricao": "Observação clara de Júpiter.",
+    "Caminho_img": r"C:\Users\Usuario\Desktop\Backup area de trabalho\Tads\Diário Astronômico\Astronomical-Diary\Imagens\Jupiter.jpg"}
 
+x = registros.insert_one(insercao)
 
-x = registros.insert_one(mydict)
-
-print(db.list_collection_names())
-
-print(meucliente.list_database_names()) 
-
-quantidade_total = registros.count_documents({})
-print(f"A quantidade total de registros é: {quantidade_total}")
+insercao = {
+    "Astro": "Planeta", 
+    "Nome": "Marte",
+    "Data": "28/06/2025",
+    "Horário": "20:45",
+    "Cidade": "Cambé",
+    "CoordenadasX": "-22.687640",
+    "CoordenadasY": "-45.733570",
+    "Equipamento": "Binóculo 10x50",
+    "Visibilidade": 4,
+    "EscalaBortle": 3,
+    "Descricao": ""}
