@@ -1,4 +1,5 @@
 import pymongo
+from datetime import datetime
 
 meucliente = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -6,24 +7,17 @@ db = meucliente["DiaAstro"]
 
 registros = db["registros"]
 
-insercao = {"Astro": "Costelação", 
-          "Nome": "Costelação de Órion",
-          "Data": "25/06/2025 21:30",
-          "Cidade": "Londrina",
-          "CoordenadasX": "-23.169614",
-          "CoordenadasY": "-50.636040",
-          "Equipamento": "Binóculo",
-          "Visibilidade": 5,
-          "EscalaBortle": 1,
-          "Descricao": "Registro da constelação de Órion de ponta cabeça",
-          "Caminho_img": r"C:\Users\Usuario\Desktop\Backup area de trabalho\Tads\Diário Astronômico\Astronomical-Diary\Imagens\Costelacao.png"}
+salvar_data = "25/06/2025"
+salvar_horario = "21:30"
 
-x = registros.insert_one(insercao)
+salvar_dia, salvar_mes, salvar_ano = salvar_data.split("/")
+hora, minuto = salvar_horario.split(":")
+data_obj = datetime(int(salvar_ano), int(salvar_mes), int(salvar_dia), int(hora), int(minuto))
 
 insercao = {
     "Astro": "Planeta", 
-    "Nome": "Júpiter e suas Luas Galileanas",
-    "Data": "15/06/2025 21:30",
+    "Nome": "Júpiter",
+    "Data": data_obj,
     "Cidade": "Cambé",
     "CoordenadasX": "-22.424319",
     "CoordenadasY": "-45.453345",
@@ -31,19 +25,21 @@ insercao = {
     "Visibilidade": 4,
     "EscalaBortle": 4,
     "Descricao": "Observação clara de Júpiter.",
-    "Caminho_img": r"C:\Users\Usuario\Desktop\Backup area de trabalho\Tads\Diário Astronômico\Astronomical-Diary\Imagens\Jupiter.jpg"}
+    "Caminho_img": r"C:/Users/Alunos/Desktop/Nova pasta/Diario-astronomico/Imagens/Jupiter.jpg"}
 
 x = registros.insert_one(insercao)
 
 insercao = {
     "Astro": "Planeta", 
-    "Nome": "Marte",
-    "Data": "28/06/2025",
-    "Horário": "20:45",
+    "Nome": "Vênus",
+    "Data": data_obj,
     "Cidade": "Cambé",
     "CoordenadasX": "-22.687640",
     "CoordenadasY": "-45.733570",
     "Equipamento": "Binóculo 10x50",
     "Visibilidade": 4,
     "EscalaBortle": 3,
-    "Descricao": ""}
+    "Descricao": "",
+    "Caminho_img": r"C:/Users/Alunos/Desktop/Nova pasta/Diario-astronomico/Imagens/Venus.png"}
+
+x = registros.insert_one(insercao)

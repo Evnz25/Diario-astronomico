@@ -84,12 +84,12 @@ class View():
         self.tela_detalhes.tkraise()
 
     def atualizar_tela_inicial(self):
-        for cartao in self.gallery_frame.winfo_children():
+        for cartao in self.galeria_frame.winfo_children():
             cartao.destroy()
 
         registros = self.controller.pegar_todos_registros_controller()
         if not registros:
-            ttk.Label(self.gallery_frame, text="Nenhuma anotação encontrada. Crie a primeira!", 
+            ttk.Label(self.galeria_frame, text="Nenhuma anotação encontrada", 
                       font=("Inter", 12), background="#F0F0F0").pack(pady=20)
             return
 
@@ -97,7 +97,7 @@ class View():
             linha = i // 4
             coluna = i % 4
             data_hora = f"{reg.get('Data', '')}"
-            cartao = self._criar_cartao_anotacao(self.gallery_frame,
+            cartao = self.cartao_anotacao(self.galeria_frame,
                                                  str(reg.get('_id')),
                                                  reg.get('Caminho_img', ''),
                                                  reg.get('Nome', 'Sem Título'),
@@ -122,7 +122,7 @@ class View():
             cartao.destroy()
         melhor_reg = self.controller.anotacao_melhor_visibilidade_controller()
         if melhor_reg:
-            cartao = self._criar_cartao_anotacao(self.melhor_anotacao_card_container,
+            cartao = self.cartao_anotacao(self.melhor_anotacao_card_container,
                                                  str(melhor_reg.get('_id')),
                                                  melhor_reg.get('Caminho_img', ''),
                                                  melhor_reg.get('Nome', 'Sem Título'),
@@ -152,9 +152,9 @@ class View():
         
         canvas = tk.Canvas(content_frame, bg="#F0F0F0", highlightthickness=0)
         scrollbar = ttk.Scrollbar(content_frame, orient="vertical", command=canvas.yview)
-        self.gallery_frame = tk.Frame(canvas, bg="#F0F0F0") 
-        self.gallery_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.create_window((0, 0), window=self.gallery_frame, anchor="nw")
+        self.galeria_frame = tk.Frame(canvas, bg="#F0F0F0") 
+        self.galeria_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0, 0), window=self.galeria_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
@@ -163,7 +163,10 @@ class View():
         self.tela_analise_container = tk.Frame(self.container, bg="#F0F0F0")
         self.tela_analise_container.grid(row=0, column=0, sticky='nsew')
         
-        btn_voltar = ttk.Button(self.tela_analise_container, text="Voltar para o Início", style="Dark.TButton", command=self.mostrar_tela_inicial)
+        btn_voltar = ttk.Button(
+            self.tela_analise_container, 
+            text="Voltar para o Início", 
+            command=self.mostrar_tela_inicial)
         btn_voltar.pack(side="bottom", pady=20)
 
         scroll_content_frame = tk.Frame(self.tela_analise_container, bg="#F0F0F0")
@@ -221,7 +224,6 @@ class View():
         btn_buscar_bortle = ttk.Button(
             input_frame, 
             text="Buscar", 
-            style="Dark.TButton", 
             command=self.buscar_cidades_por_bortle 
         )
         btn_buscar_bortle.pack(side="left")
@@ -258,7 +260,7 @@ class View():
         data_frame = ttk.Frame(form_container)
         data_frame.grid(row=2, column=1, sticky="ew", padx=(5,0))
         
-        ttk.Label(data_frame, text="Data:").pack(side="left", padx=(0,2))
+        ttk.Label(data_frame, text="Data (DD/MM/AAAA):").pack(side="left", padx=(0,2))
         self.entryData = ttk.Entry(data_frame, width=10)
         self.entryData.pack(side="left")
 
@@ -300,24 +302,36 @@ class View():
 
         image_frame = ttk.Frame(form_container)
         image_frame.grid(row=0, column=3, rowspan=11, sticky="n", padx=(20,0))
-        ttk.Button(image_frame, text="Adicionar imagem", command=self.upload_image).pack()
+        ttk.Button(image_frame, text="Adicionar imagem", command=self.abaixar_imagem).pack()
         self.img_placeholder = tk.Frame(image_frame, width=200, height=150, bg="white", relief="solid", borderwidth=1)
         self.img_placeholder.pack(pady=5)
 
-        btn_voltar = ttk.Button(self.tela_anotacao, text="Voltar para o Início", style="Dark.TButton", command=self.mostrar_tela_inicial)
+        btn_voltar = ttk.Button(
+            self.tela_anotacao, 
+            text="Voltar para o Início", 
+            command=self.mostrar_tela_inicial)
         btn_voltar.pack(side="bottom", pady=20)
 
-        self.btn_cadastrar = ttk.Button(self.tela_anotacao, text="Cadastrar", style="Dark.TButton", command=self.salvar_registros)
+        self.btn_cadastrar = ttk.Button(
+            self.tela_anotacao, 
+            text="Cadastrar", 
+            command=self.salvar_registros)
         self.btn_cadastrar.pack(side="bottom", pady=20)
 
     def criar_tela_detalhes(self):
         self.tela_detalhes = tk.Frame(self.container, bg="#E0E0E0")
         self.tela_detalhes.grid(row=0, column=0, sticky='nsew')
 
-        btn_voltar = ttk.Button(self.tela_detalhes, text="Voltar para o Início", style="Dark.TButton", command=self.mostrar_tela_inicial)
+        btn_voltar = ttk.Button(
+            self.tela_detalhes, 
+            text="Voltar para o Início", 
+            command=self.mostrar_tela_inicial)
         btn_voltar.pack(side="bottom", pady=20)
 
-        btn_deletar = ttk.Button(self.tela_detalhes, text="Deletar Anotação", style="Dark.TButton", command=self.deletar_registro)
+        btn_deletar = ttk.Button(
+            self.tela_detalhes, 
+            text="Deletar Anotação", 
+            command=self.deletar_registro)
         btn_deletar.pack(side='bottom')
 
         details_container = tk.Frame(self.tela_detalhes, bg="#E0E0E0")
@@ -352,7 +366,7 @@ class View():
 
     def salvar_registros(self):
         if not self.file_path:
-            messagebox.showwarning("Aviso", "Por favor, adicione uma imagem para o registro.")
+            messagebox.showerror("Adicione uma imagem para o registro.")
             return
 
         dados = {
@@ -393,29 +407,25 @@ class View():
             self.entryDescricao.delete('1.0', 'end')
             self.visibilidade.set(3); self.bortle.set(5)
             self.file_path = None
-            for widget in self.img_placeholder.winfo_children(): widget.destroy()
+            for cartao in self.img_placeholder.winfo_children(): 
+                cartao.destroy()
 
             self.mostrar_tela_inicial()
         else:
             messagebox.showerror("Erro no Banco de Dados", "Não foi possível salvar o registro.")
 
-    def upload_image(self):        
-        path = filedialog.askopenfilename(filetypes=[("Imagens", "*.jpg *.jpeg *.png *.gif")])
+    def abaixar_imagem(self):        
+        path = filedialog.askopenfilename(filetypes=[("Imagens", "*.jpg *.jpeg *.png")])
         if path:
             self.file_path = path
-            for widget in self.img_placeholder.winfo_children():
-                widget.destroy()
+            for cartao in self.img_placeholder.winfo_children():
+                cartao.destroy()
             
-            img = Image.open(self.file_path)
-            img.thumbnail((200, 150))
-            photo = ImageTk.PhotoImage(img)
-            
-            img_label = tk.Label(self.img_placeholder, image=photo, bg="white")
-            img_label.image = photo
+            img_label = tk.Label(self.img_placeholder, bg="white")
             img_label.pack()
 
-    def _criar_cartao_anotacao(self, parent, registro_id, imagem_path, titulo, data_obj):
-        card_frame = tk.Frame(parent, bg="#F0F0F0", cursor="hand2") # Adiciona cursor de "mãozinha"
+    def cartao_anotacao(self, parent, registro_id, imagem_path, titulo, data_obj):
+        card_frame = tk.Frame(parent, bg="#F0F0F0") 
       
         if imagem_path:
             try:
@@ -450,7 +460,7 @@ class View():
         sucesso = self.controller.deletar_registro_controller(self.registro_atual_id)
 
         if sucesso:
-            messagebox.showinfo("Sucesso", "Anotação deletada com sucesso.")
+            messagebox.showinfo("Aviso, Anotação deletada com sucesso.")
             self.registro_atual_id = None
             self.mostrar_tela_inicial()
         else:
@@ -462,13 +472,13 @@ class View():
         lista_cidades = self.controller.pegar_cidades_por_bortle_controller(valor_bortle)
         
         if lista_cidades:
-            resultado_str = ", ".join(lista_cidades)
+            cidades = ", ".join(lista_cidades)
         else:
-            resultado_str = f"Nenhuma cidade encontrada com escala Bortle {int(valor_bortle)}."
+            cidades = f"Nenhuma cidade."
             
         self.bortle_results_text.config(state='normal')    
         self.bortle_results_text.delete('1.0', 'end')      
-        self.bortle_results_text.insert('1.0', resultado_str) 
+        self.bortle_results_text.insert('1.0', cidades) 
         self.bortle_results_text.config(state='disabled')  
 
 if __name__ == "__main__":

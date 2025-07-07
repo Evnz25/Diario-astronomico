@@ -36,7 +36,8 @@ class Model():
             {"$limit": 1}
         ]
         resultado = list(self.registros.aggregate(pipeline))
-        if not resultado: return "N/D"
+        if not resultado: 
+            return "Sem astro"
         return resultado[0]['_id']
     
     def media_visibilidade(self):
@@ -44,11 +45,13 @@ class Model():
             {"$group": {"_id": None, "mediaVis": {"$avg": "$Visibilidade"}}}
         ]
         resultado = list(self.registros.aggregate(pipeline))
-        if not resultado: return 0
+        if not resultado: 
+            return 0
         return round(resultado[0]["mediaVis"], 2)
     
     def mes_de_mais_observacao(self):
-        if self.registros.count_documents({}) == 0: return "N/D"
+        if self.registros.count_documents({}) == 0: 
+            return "Sem registro"
         pipeline = [
             {"$project": {"mes": {"$month": "$Data"}}},
             {"$group": {"_id": "$mes", "contagem": {"$sum": 1}}},
@@ -56,22 +59,26 @@ class Model():
             {"$limit": 1}
         ]
         resultado = list(self.registros.aggregate(pipeline))
-        if not resultado: return "N/D"
-        return Meses.get(resultado[0]['_id'], "N/D")
+        if not resultado: 
+            return "Sem registro"
+        return Meses.get(resultado[0]['_id'], "Sem registro")
     
     def mes_de_melhor_visibilidade(self):
-        if self.registros.count_documents({}) == 0: return "N/D"
+        if self.registros.count_documents({}) == 0: 
+            return "Sem registro"
         pipeline = [
             {"$group": {"_id": {"$month": "$Data"}, "media_visibilidade": {"$avg": "$Visibilidade"}}},
             {"$sort": {"media_visibilidade": -1}},
             {"$limit": 1}
         ]
         resultado = list(self.registros.aggregate(pipeline))
-        if not resultado: return "N/D"
-        return Meses.get(resultado[0]['_id'], "N/D")
+        if not resultado: 
+            return "Sem registro"
+        return Meses.get(resultado[0]['_id'], "Sem registro")
     
     def anotacao_melhor_visibilidade(self):
-        if self.registros.count_documents({}) == 0: return None
+        if self.registros.count_documents({}) == 0: 
+            return None
         melhor_registro = self.registros.find_one(sort=[("Visibilidade", -1)])
         return melhor_registro
 
@@ -81,7 +88,7 @@ class Model():
             hora, minuto = salvar_horario.split(":")
             data_obj = datetime(int(salvar_ano), int(salvar_mes), int(salvar_dia), int(hora), int(minuto))
 
-            mydict = {
+            insercao = {
                 "Astro": salvar_astro, 
                 "Nome": salvar_nomeregistro,
                 "Data": data_obj,
@@ -95,15 +102,14 @@ class Model():
                 "Caminho_img": salvar_caminho_img
             }
             
-            self.registros.insert_one(mydict)
+            self.registros.insert_one(insercao)
             return True
 
-        except (ValueError, TypeError) as e:
-            print(f"Erro ao criar data ou converter valores: {e}")
+        except (ValueError) as erro:
+            print(f"Erro ao converter valores: {erro}")
             return False
         
     def deletar_registro(self, registro_id):
-        """Deleta um documento da coleção pelo seu _id."""
         try:
             obj_id = ObjectId(registro_id)
             resultado = self.registros.delete_one({"_id": obj_id})
@@ -125,6 +131,6 @@ class Model():
             cidades_encontradas = self.registros.distinct("Cidade", query)
             
             return cidades_encontradas
-        except (ValueError, TypeError) as e:
-            print(f"Erro ao converter valor Bortle ou ao buscar cidades: {e}")
+        except (ValueError, TypeError) as erro:
+            print(f"Erro ao converter valor Bortle ou ao buscar cidades: {erro}")
             return [] 

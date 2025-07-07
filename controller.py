@@ -10,16 +10,13 @@ class Controller():
         return self.model.salvar_registro(salvar_astro,  salvar_data, salvar_nomeregistro, salvar_horario, salvar_cidade, salvar_coordenadasX, salvar_coordenadasY, salvar_equipamento, salvar_visibilidade, salvar_escalabortle, salvar_descricao, salvar_caminho_img)
         
     def qtd_registros_controller(self):
-        text = self.model.qtd_registros()
-        return(text)
+        return self.model.qtd_registros()
 
     def astro_mais_observado_controller(self):
-        text = self.model.astro_mais_observado()
-        return(text)
+        return self.model.astro_mais_observado()
 
     def media_visibilidade_controller(self):
-        text = self.model.media_visibilidade()
-        return(text)
+        return self.model.media_visibilidade()
 
     def pegar_todos_registros_controller(self):
         return self.model.pegar_registros()
